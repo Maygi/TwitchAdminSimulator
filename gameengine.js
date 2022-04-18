@@ -148,7 +148,7 @@ GameEngine.prototype.startInput = function () {
 	var buttonKeys = ['&','(','%'];
 	this.ctx.canvas.addEventListener('click', event => {
 		console.log(event.clientX + ", " + event.clientY);
-		if (that.buttonChallenge != null && !that.player1.isDead && that.player1.currentHealth > 0) {
+		if (that.buttonChallenge != null && !that.player1.isDead && that.player1.currentHealth > 0 && gameStarted) {
 			if (that.buttonChallenge.cooldown == 0) {
 				for (var i = 0; i < buttonOptions.length; i++) {
 					if (that.buttonChallenge.currentButtons.length > 0) {
@@ -218,7 +218,8 @@ GameEngine.prototype.startInput = function () {
 					that.player1.stunned = true;
 					that.player1.difficultyTick = 0;
 					
-					that.pauseTime = 5;
+					that.time = that.maxTime;
+					that.pauseTime = 30;
 					that.addEntity(new BlackScreenFade(that, 30));
 					//that.player1.teleportToX = that.player1.lastSafeX;
 					//that.player1.teleportToY = that.player1.lastSafeY - 3;
@@ -334,7 +335,7 @@ GameEngine.prototype.update = function () {
 			this.score = this.scoreToSet;
 			this.scoreToSet = 0;
 		}
-		if (this.maxTime > 1 && this.player1.currentHealth > 0) {
+		if (this.pauseTime == 0 && this.maxTime > 1 && this.player1.currentHealth > 0) {
 			if (this.time > 0)
 				this.time--;			
 			if (this.time == 0)
