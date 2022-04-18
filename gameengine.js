@@ -146,6 +146,34 @@ GameEngine.prototype.startInput = function () {
     var that = this;
 	var buttonOptions = ["↑","↓","←"];
 	var buttonKeys = ['&','(','%'];
+	this.ctx.canvas.addEventListener('click', event => {
+		console.log(event.clientX + ", " + event.clientY);
+		if (that.buttonChallenge != null && !that.player1.isDead && that.player1.currentHealth > 0) {
+			if (that.buttonChallenge.cooldown == 0) {
+				for (var i = 0; i < buttonOptions.length; i++) {
+					if (that.buttonChallenge.currentButtons.length > 0) {
+						if (that.buttonChallenge.currentButtons[0] == buttonOptions[i]) {
+							if (event.clientY <= 250) {
+								that.player1.animationDelay = 30;
+								that.player1.currentAnimation = that.player1.okAnimation;
+							} else {
+								that.player1.animationDelay = 30;
+								that.player1.currentAnimation = that.player1.noAnimation;								
+							}
+							if (event.clientY <= 250 && '&' == buttonKeys[i] ||
+								event.clientY > 250 && '(' == buttonKeys[i]) {
+								that.buttonChallenge.success();
+								break;
+							} else {
+								that.buttonChallenge.fail();
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	});
     this.ctx.canvas.addEventListener("keydown", function (e) {
 		if (that.buttonChallenge != null && !that.player1.isDead && that.player1.currentHealth > 0) {
 			if (that.buttonChallenge.cooldown == 0) {
